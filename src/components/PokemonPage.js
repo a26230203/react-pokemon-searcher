@@ -6,9 +6,18 @@ import { Container } from 'semantic-ui-react'
 
 class PokemonPage extends React.Component {
   state = {
-    serachText: "",
-    pokemon:this.props.pokemon
+    pokemon: [],
+    serachText: ""
   }
+
+
+    componentDidMount() {
+    fetch('http://localhost:3000/pokemon')
+      .then(res => res.json())
+        .then(pokemon => this.setState({pokemon}))
+  }
+
+
 
   filterSearch = (inputValue) => {
       this.setState({
@@ -24,7 +33,7 @@ class PokemonPage extends React.Component {
   }
 
   render() {
-    const filterPokemon = this.props.pokemon.filter((pokemon)=> pokemon.name.includes(this.state.serachText))
+    const filterPokemon = this.state.pokemon.filter((pokemon)=> pokemon.name.includes(this.state.serachText))
     return (
       <Container>
         <h1>Pokemon Searcher</h1>
@@ -33,7 +42,7 @@ class PokemonPage extends React.Component {
         <br />
         <Search filterSearch={this.filterSearch}/>
         <br />
-        <PokemonCollection pokemon={filterPokemon} creatPokemon={this.creatPokemon}/>
+        <PokemonCollection pokemon={filterPokemon} />
       </Container>
     )
   }
